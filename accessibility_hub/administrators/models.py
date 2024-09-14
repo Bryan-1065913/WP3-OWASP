@@ -2,25 +2,22 @@ from django.db import models
 from django.contrib.auth.hashers import make_password
 
 
-class Medewerker(models.Model):
-    medewerker_id = models.AutoField(primary_key=True)
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class Medewerker(AbstractUser):
+    # Voeg extra velden toe die je nodig hebt
     voornaam = models.CharField(max_length=255)
     achternaam = models.CharField(max_length=100)
-    gebruikersnaam = models.CharField(max_length=255, default='')
-    wachtwoord = models.CharField(max_length=255)
-    emailadres = models.CharField(max_length=255)
+    gebruikersnaam = models.CharField(max_length=255, unique=True, default='')
+    emailadres = models.EmailField(max_length=255, unique=True)
     postcode = models.CharField(max_length=6)
     huisnummer = models.IntegerField()
     geslacht = models.CharField(max_length=10)
     telefoonnummer = models.CharField(max_length=15)
     geboortedatum = models.DateField()
-    admin = models.BooleanField()
+    admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            self.wachtwoord = make_password(self.wachtwoord)
-        super().save(*args, **kwargs)
 
     class Meta:
         db_table = 'medewerkers'
