@@ -1,27 +1,27 @@
 {% extends "base.html" %}
 
-{% block title %}Organisatie {{ organisatie.bedrijfsnaam }}{% endblock title %}
+{% block title %}Organisatie {{ organisatie.bedrijfsnaam|escape }}{% endblock title %}
 
 {% block content %}
 
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <a class="btn btn-primary mb-2" href="/medewerkers/portal/" role="button">Terug naar portal</a>
+                <a class="btn btn-primary mb-2" href="{% url 'medewerkers:portal' %}" role="button">Terug naar portal</a>
                 <div class="row">
                     <div class="col-8 ">
-                        <h1>Gegevens van {{ organisatie.bedrijfsnaam }}</h1>
+                        <h1>Gegevens van {{ organisatie.bedrijfsnaam|escape }}</h1>
                     </div>
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-6">
-                                    <p><b>Organisatie ID:</b> {{ organisatie.id }}</p>
-                                    <p><b>Voornaam:</b> {{ organisatie.bedrijfsnaam }}</p>
-                                    <p><b>Voornaam:</b> {{ organisatie.first_name }}</p>
-                                    <p><b>Achternaam:</b> {{ organisatie.last_name }}</p>
-                                    <p><b>E-mailadres:</b> {{ organisatie.email }}</p>
-                                    <p><b>Status:</b> {{ organisatie.status }}</p>
+                                    <p><b>Organisatie ID:</b> {{ organisatie.id|escape }}</p>
+                                    <p><b>Voornaam:</b> {{ organisatie.bedrijfsnaam|escape }}</p>
+                                    <p><b>Voornaam:</b> {{ organisatie.first_name|escape }}</p>
+                                    <p><b>Achternaam:</b> {{ organisatie.last_name|escape }}</p>
+                                    <p><b>E-mailadres:</b> {{ organisatie.email|escape }}</p>
+                                    <p><b>Status:</b> {{ organisatie.status|escape }}</p>
                                     <p><b>Aangemaakt op:</b> {{ organisatie.date_joined|date:"d-m-Y H:i" }}</p>
                                 </div>
                             </div>
@@ -32,11 +32,11 @@
                         <div class="col-6 d-flex justify-content-start align-items-center">
                             <a class="btn btn-danger mb-2"
                                href="{% url 'administrators:verwijder_organisatie' organisatie.id %}"
-                               role="button">Weiger {{ organisatie.bedrijfsnaam }}</a></div>
+                               role="button">Weiger {{ organisatie.bedrijfsnaam|escape }}</a></div>
                         <div class="col-6 d-flex justify-content-end align-items-center">
                             <a class="btn btn-primary mb-2"
                                href="{% url 'administrators:accepteer_organisatie' organisatie.id %}"
-                               role="button">Accepteer {{ organisatie.bedrijfsnaam }}</a></div>
+                               role="button">Accepteer {{ organisatie.bedrijfsnaam|escape }}</a></div>
                     </div>
                     {% endif %}
                 </div>
