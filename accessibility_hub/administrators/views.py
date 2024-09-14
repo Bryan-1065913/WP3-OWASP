@@ -8,41 +8,42 @@ from django.conf import settings
 from django.http import JsonResponse
 from .models import Medewerker, Ervaringsdeskundige, Beperking
 from companies.models import Organisatie, Onderzoek, Vraag
-
-
-# Authenticatie imports voor de login
+from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
-from django.contrib.auth.models import auth
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.hashers import check_password
+from .forms import LoginForm
 
-def login(request):
+
+
+def login_view(request):
     form = LoginForm()
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            gebruikersnaam = request.POST.get('gebruikersnaam')
-            wachtwoord = request.POST.get('wachtwoord')
-            print(gebruikersnaam)
-            print(wachtwoord)    
-            medewerker = Medewerker.objects.filter(gebruikersnaam=gebruikersnaam).first()
-            if medewerker and check_password(wachtwoord, medewerker.wachtwoord):
-                request.session['medewerker_id'] = medewerker.medewerker_id
-                request.session['voornaam'] = medewerker.voornaam
-                request.session['achternaam'] = medewerker.achternaam
-                request.session['gebruikersnaam'] = medewerker.gebruikersnaam
-                request.session['emailadres'] = medewerker.emailadres
-                request.session['admin'] = medewerker.admin
-                return redirect('../portal')    
+            gebruikersnaam = form.cleaned_data.get('gebruikersnaam')
+            wachtwoord = form.cleaned_data.get('wachtwoord')
+
+            user = authenticate(request, username=gebruikersnaam, password=wachtwoord)
+            if user is not None:
+                auth_login(request, user)
+
+                medewerker = Medewerker.objects.filter(gebruikersnaam=gebruikersnaam).first()
+                if medewerker:
+                    request.session['medewerker_id'] = medewerker.medewerker_id
+                    request.session['voornaam'] = medewerker.voornaam
+                    request.session['achternaam'] = medewerker.achternaam
+                    request.session['gebruikersnaam'] = medewerker.gebruikersnaam
+                    request.session['emailadres'] = medewerker.emailadres
+                    request.session['admin'] = medewerker.admin
+
+                return redirect('../portal')
             else:
-                messages.success(request, ('Inloggen mislukt. Ongeldige gebruikersnaam of wachtwoord. (Let op hoofdletters!)'))
+                messages.error(request, 'Inloggen mislukt. Ongeldige gebruikersnaam of wachtwoord.')
         else:
-            print('Formulier is niet geldig')
+            messages.error(request, 'Formulier is niet geldig. Probeer opnieuw.')
     else:
         print('Geen POST-verzoek ontvangen.')
 
     context = {'loginform': form}
-
     return render(request, 'login.html', context=context)
 
 def signup(request):
