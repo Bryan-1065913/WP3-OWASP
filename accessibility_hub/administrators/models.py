@@ -1,12 +1,8 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
-
-
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 
 class Medewerker(AbstractUser):
-    # Voeg extra velden toe die je nodig hebt
     voornaam = models.CharField(max_length=255)
     achternaam = models.CharField(max_length=100)
     gebruikersnaam = models.CharField(max_length=255, unique=True, default='')
