@@ -23,13 +23,21 @@ function checkForUpdatesOrganisation() {
 
                 const formattedDate = `${('0' + dateJoined.getDate()).slice(-2)}-${('0' + (dateJoined.getMonth() + 1)).slice(-2)}-${dateJoined.getFullYear()} ${('0' + dateJoined.getHours()).slice(-2)}:${('0' + dateJoined.getMinutes()).slice(-2)}:${('0' + dateJoined.getSeconds()).slice(-2)}`;
 
+                function escapeHTML(str) {
+                    return str.replace(/&/g, "&amp;")
+                              .replace(/</g, "&lt;")
+                              .replace(/>/g, "&gt;")
+                              .replace(/"/g, "&quot;")
+                              .replace(/'/g, "&#39;");
+                }
+
                 row.innerHTML = `
-                    <td>${organisatie.bedrijfsnaam}</td>
-                    <td>${organisatie.email}</td>
-                    <td>${organisatie.first_name}</td>
-                    <td>${organisatie.last_name}</td>
-                    <td>${organisatie.status}</td>
-                    <td>${formattedDate}</td>
+                    <td>${escapeHTML(organisatie.bedrijfsnaam)}</td>
+                    <td>${escapeHTML(organisatie.email)}</td>
+                    <td>${escapeHTML(organisatie.first_name)}</td>
+                    <td>${escapeHTML(organisatie.last_name)}</td>
+                    <td>${escapeHTML(organisatie.status)}</td>
+                    <td>${escapeHTML(formattedDate)}</td>
                 `;
 
                 tbody.appendChild(row);
