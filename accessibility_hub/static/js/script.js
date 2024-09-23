@@ -25,10 +25,10 @@ function checkForUpdatesOrganisation() {
 
                 function escapeHTML(str) {
                     return str.replace(/&/g, "&amp;")
-                              .replace(/</g, "&lt;")
-                              .replace(/>/g, "&gt;")
-                              .replace(/"/g, "&quot;")
-                              .replace(/'/g, "&#39;");
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#39;");
                 }
 
                 row.innerHTML = `
@@ -68,13 +68,20 @@ function checkForUpdatesResearch() {
                 row.classList.add('clickable-row');
                 row.setAttribute('data-href', `/medewerkers/onderzoek/${onderzoek.id}`);
 
+                function escapeHTML(str) {
+                    return str.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#39;");
+                }
 
                 row.innerHTML = `
-                    <td>${onderzoek.titel}</td>
-                    <td>${onderzoek.organisatie}</td>
-                    <td>${onderzoek.startdatum}</td>
-                    <td>${onderzoek.einddatum}</td>
-                    <td>${onderzoek.status}</td>
+                    <td>${escapeHTML(onderzoek.titel)}</td>
+                    <td>${escapeHTML(onderzoek.organisatie)}</td>
+                    <td>${escapeHTML(onderzoek.startdatum)}</td>
+                    <td>${escapeHTML(onderzoek.einddatum)}</td>
+                    <td>${escapeHTML(onderzoek.status)}</td>
                 `;
 
                 tbody.appendChild(row);
