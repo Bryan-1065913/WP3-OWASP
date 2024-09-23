@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from administrators.models import Medewerker, Ervaringsdeskundige, Beperking
 from experiential_experts.forms import CreateExpertForm, LoginFormExpert
 from companies.models import Onderzoek
+from django.urls import reverse
 
 # Authenticatie imports voor de login
 from django.contrib import messages
@@ -87,7 +88,7 @@ def login(request):
                     request.session['achternaam'] = ervaringsdeskundige.achternaam
                     request.session['email'] = ervaringsdeskundige.email
                     if ervaringsdeskundige.account_status == 2:
-                        return redirect('../overzicht_afkeuring/' + str(ervaringsdeskundige.deskundige_id))
+                        return redirect(reverse('overzicht_afkeuring', args=[ervaringsdeskundige.deskundige_id]))
                     else:
                         return redirect('../onderzoek_overzicht')
                 else:
