@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-4=8ni*m!u^1dhffuzqn!!j$())ebeob-+@waoj*g)$+&u-s=*p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'timdenduin@gmail.com'
 EMAIL_HOST_PASSWORD = 'vtpzdhsxeuuvulfe'
