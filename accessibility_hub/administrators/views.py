@@ -22,22 +22,28 @@ def login_view(request):
             gebruikersnaam = form.cleaned_data.get('gebruikersnaam')
             wachtwoord = form.cleaned_data.get('wachtwoord')
 
-            user = authenticate(request, username=gebruikersnaam, password=wachtwoord)
-            if user is not None:
-                auth_login(request, user)
+            # Zoek de medewerker op basis van gebruikersnaam
+            medewerker = Medewerker.objects.filter(gebruikersnaam=gebruikersnaam).first()
 
-                medewerker = Medewerker.objects.filter(gebruikersnaam=gebruikersnaam).first()
-                if medewerker:
-                    request.session['medewerker_id'] = medewerker.medewerker_id
+            if medewerker:
+                # Haal de salt op en hash het wachtwoord met de salt
+                hashed_password = medewerker.hash_password_with_salt(wachtwoord)
+
+                # Authenticate met het gehashte wachtwoord
+                user = authenticate(request, username=gebruikersnaam, password=hashed_password)
+                if user is not None:
+                    auth_login(request, user)
+                    request.session['medewerker_id'] = medewerker.id
                     request.session['voornaam'] = medewerker.voornaam
                     request.session['achternaam'] = medewerker.achternaam
                     request.session['gebruikersnaam'] = medewerker.gebruikersnaam
                     request.session['emailadres'] = medewerker.emailadres
                     request.session['admin'] = medewerker.admin
-
-                return redirect('../portal')
+                    return redirect('../portal')
+                else:
+                    messages.error(request, 'Inloggen mislukt. Ongeldige gebruikersnaam of wachtwoord.')
             else:
-                messages.error(request, 'Inloggen mislukt. Ongeldige gebruikersnaam of wachtwoord.')
+                messages.error(request, 'Gebruiker niet gevonden.')
         else:
             messages.error(request, 'Formulier is niet geldig. Probeer opnieuw.')
     else:
@@ -45,7 +51,6 @@ def login_view(request):
 
     context = {'loginform': form}
     return render(request, 'login.html', context=context)
-
 def signup(request):
     if request.method == 'POST':
         form = CreateEmployeeForm(request.POST)

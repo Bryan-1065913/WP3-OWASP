@@ -4,7 +4,7 @@ from . import views
 app_name = 'administrators'
 
 urlpatterns = [
-    path('login/', views.login, name='login'),
+    path('login/', views.login_view, name='login'),
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout_view, name='logout'),
     path('get_deskundige_in_behandeling_ajax/', views.get_deskundige_in_behandeling_ajax, name='get_deskundige_in_behandeling_ajax'),
